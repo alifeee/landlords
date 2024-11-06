@@ -1,7 +1,7 @@
 {
   "name": "landlords",
   "version": "0.1.0",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "eleventy",
     "dev": "eleventy --serve"

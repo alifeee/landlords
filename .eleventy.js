@@ -1,10 +1,16 @@
-const handlebarsPlugin = require("@11ty/eleventy-plugin-handlebars");
+import handlebarsPlugin from "@11ty/eleventy-plugin-handlebars";
+import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
+  eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
   eleventyConfig.addPlugin(handlebarsPlugin);
 
   eleventyConfig.addPassthroughCopy({ _public: "/" });
 
   eleventyConfig.addFilter("eq", (a1, a2) => a1 == a2);
   eleventyConfig.addFilter("add", (a1, a2) => a1 + a2);
+}
+
+export const config = {
+  pathPrefix: "/landlords/",
 };
