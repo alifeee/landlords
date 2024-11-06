@@ -6,6 +6,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPlugin(handlebarsPlugin);
 
   eleventyConfig.addPassthroughCopy({ _public: "/" });
+  eleventyConfig.ignores.add("README.md");
 
   eleventyConfig.addFilter("eq", (a1, a2) => a1 == a2);
   eleventyConfig.addFilter("add", (a1, a2) => a1 + a2);
