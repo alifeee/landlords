@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>alifeee - landlords</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+
+  <link rel="icon" href="/landlords/favicon.ico">
+
+  <script src="/landlords/alpine.min.js" defer=""></script>
+  <script src="/landlords/handlebars.min.js"></script>
+  <script>
+    function compile(template, data, data_override) {
+      data = { ...data, ...data_override }
+      data["rent_amount"] = (data["rent_percent"] / 100 * data["market_rent"]).toFixed(0)
+      data = Object.fromEntries(Object.entries(data).map(
+        ([a1, a2]) => [a1, a2 === true || a2 === false ? a2 : "<span class='h'>" + a2 + "</span>"])
+      )
+      // console.log("compiling", template, data)
+      let t = Handlebars.compile(template);
+      return t(data);
+    }
+  </script>
+  <style>
+    .h {
+      text-decoration: underline dotted;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>
+      landlords!
+    </h1>
+    <p>
+      here are some interactive statements relating to landlords who rent to their friends.
+    </p>
+    <p>
+      for each statement, can you twiddle the sliders to make yourself happy with the result?
+    </p>
+    <p>
+      made by <a href="https://alifeee.co.uk">alifeee</a>
+    </p>
+  </header>
+
+  <main x-data="
+      {data: {
+          stewart: &quot;stewart&quot;,
+          bedrooms: &quot;4&quot;,
+          friends: &quot;3&quot;,
+          currency: &quot;£&quot;,
+          rent_time: &quot;month&quot;,
+          rent_percent: &quot;50&quot;,
+          market_rent: &quot;450&quot;,
+        }
+      }
+    ">
+    <hr>
+    <section id="statements">
+      <h2>statements</h2>
+      <fieldset name="woah" x-data="{local0: {
+      }}">
+        <legend>statement 1</legend>
+        <p x-html="compile(&quot;{{{stewart}}}&#x27;s parents bought them a house outright. It is in {{{stewart}}}&#x27;s name, and has {{{bedrooms}}} bedrooms. {{{stewart}}} lives there with {{{friends}}} friends, who {{{stewart}}} charges {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to.&quot;, data, local0)"></p>
+        <div style="margin-left: 2rem">
+        </div>
+      </fieldset>
+      <fieldset name="woah" x-data="{local1: {
+          mortgage_coverage: 80,
+                    not: true,
+                }}">
+        <legend>statement 2</legend>
+        <p x-html="compile(&quot;{{{stewart}}} is mortgaging a {{{bedrooms}}}-bed house. {{{stewart}}} could{{#if not}} not{{/if}} afford the mortgage alone. {{{stewart}}} lives there with {{{friends}}} friends, who {{{stewart}}} charges {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to, the combined rent totalling {{{mortgage_coverage}}}% of the mortgage costs.&quot;, data, local1)"></p>
+        <div style="margin-left: 2rem">
+          <label for="mortgage_coverage">mortgage_coverage</label>
+          <input type="number" id="mortgage_coverage" x-model="local1.mortgage_coverage" min="0" max="100">
+          <br>
+          <label for="not">not</label>
+          <input type="checkbox" id="not" x-model="local1.not">          <br>
+        </div>
+      </fieldset>
+      <fieldset name="woah" x-data="{local2: {
+          mortgage_coverage: 80,
+                    for_free: true,
+                }}">
+        <legend>statement 3</legend>
+        <p x-html="compile(&quot;{{{stewart}}}&#x27;s parents mortgage a {{{bedrooms}}}-bed house. {{{stewart}}} lives in the house {{#if for_free}}for free{{else}}and also pays rent{{/if}}. {{{friends}}} of {{{stewart}}}&#x27;s friends live there, who pay {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to, the combined rent totalling {{{mortgage_coverage}}}% of the mortgage costs.&quot;, data, local2)"></p>
+        <div style="margin-left: 2rem">
+          <label for="mortgage_coverage">mortgage_coverage</label>
+          <input type="number" id="mortgage_coverage" x-model="local2.mortgage_coverage" min="0" max="100">
+          <br>
+          <label for="for_free">for_free</label>
+          <input type="checkbox" id="for_free" x-model="local2.for_free">          <br>
+        </div>
+      </fieldset>
+      <fieldset name="woah" x-data="{local3: {
+          downpayment: 10,
+                    not_downpayment: false,
+                }}">
+        <legend>statement 4</legend>
+        <p x-html="compile(&quot;{{{stewart}}} has payed {{{downpayment}}}% of the mortgage as a downpayment on a {{{bedrooms}}}-bed house. {{{stewart}}} and {{{friends}}} friends live there, all paying {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to make up the full mortgage costs. Each year, the ownership of the house so far is split between the relative amount of money each person has payed so far, {{#if not_downpayment}}not {{/if}}including {{{stewart}}}&#x27;s downpayment.&quot;, data, local3)"></p>
+        <div style="margin-left: 2rem">
+          <label for="downpayment">downpayment (<span x-text="local3.downpayment"></span>)</label>
+          <input type="range" id="downpayment" x-model="local3.downpayment" min="0" max="100">
+          <br>
+          <label for="not_downpayment">not_downpayment</label>
+          <input type="checkbox" id="not_downpayment" x-model="local3.not_downpayment">          <br>
+        </div>
+      </fieldset>
+    </section>
+
+    <hr>
+    <section id="global-data">
+      <h2>twiddles</h2>
+      <label for="stewart">name</label>
+      <input type="text" id="stewart" x-model="data.stewart">
+      <br>
+      <label for="bedrooms">bedrooms</label>
+      <input type="number" id="bedrooms" x-model="data.bedrooms" min="" max="">
+      <br>
+      <label for="friends">friends (<span x-text="data.friends"></span>)</label>
+      <input type="range" id="friends" x-model="data.friends" min="0" max="5">
+      <br>
+      <label for="currency">currency</label>
+      <input type="text" id="currency" x-model="data.currency">
+      <br>
+      <label for="rent_time">rent_time</label>
+      <input type="text" id="rent_time" x-model="data.rent_time">
+      <br>
+      <label for="rent_percent">rent_percent (<span x-text="data.rent_percent"></span>)</label>
+      <input type="range" id="rent_percent" x-model="data.rent_percent" min="0" max="120">
+      <br>
+      <label for="market_rent">market_rent</label>
+      <input type="number" id="market_rent" x-model="data.market_rent" min="10" max="1500">
+      <br>
+      <details>
+        <summary>debug</summary>
+        stewart: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.stewart"></span>
+        <br>
+        bedrooms: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.bedrooms"></span>
+        <br>
+        friends: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.friends"></span>
+        <br>
+        currency: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.currency"></span>
+        <br>
+        rent_time: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.rent_time"></span>
+        <br>
+        rent_percent: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.rent_percent"></span>
+        <br>
+        market_rent: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.market_rent"></span>
+        <br>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+  </footer>
+</body>
+
+</html>

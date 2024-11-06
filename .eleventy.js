@@ -14,4 +14,7 @@ export default function (eleventyConfig) {
 
 export const config = {
   pathPrefix: "/landlords/",
+  dir: {
+    output: "docs",
+  },
 };
