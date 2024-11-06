@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>alifeee - landlords</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="" />
+
+  <link rel="icon" href="/favicon.ico" />
+
+  <script src="/alpine.min.js" defer></script>
+  <script src="/handlebars.min.js"></script>
+  <script>
+    function compile(template, data, data_override) {
+      data = { ...data, ...data_override }
+      data["rent_amount"] = (data["rent_percent"] / 100 * data["market_rent"]).toFixed(0)
+      data = Object.fromEntries(Object.entries(data).map(
+        ([a1, a2]) => [a1, a2 === true || a2 === false ? a2 : "<span class='h'>" + a2 + "</span>"])
+      )
+      // console.log("compiling", template, data)
+      let t = Handlebars.compile(template);
+      return t(data);
+    }
+  </script>
+  <style>
+    .h {
+      text-decoration: underline dotted;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>
+      landlords!
+    </h1>
+    <p>
+      here are some interactive statements relating to landlords who rent to their friends.
+    </p>
+    <p>
+      for each statement, can you twiddle the sliders to make yourself happy with the result?
+    </p>
+    <p>
+      made by <a href="https://alifeee.co.uk">alifeee</a>
+    </p>
+  </header>
+
+  <main x-data='
+      {data: {
+        {{#each statements.data_defaults}}
+          {{@key}}: "{{default}}",
+        {{/each}}
+        }
+      }
+    '>
+    <hr>
+    <section id="statements">
+      <h2>statements</h2>
+      {{#each statements.statements}}
+      <fieldset name="woah" x-data='{local{{@index}}: {
+        {{#each data}}
+          {{#if (eq type "name")}}
+          {{@key}}: "{{default}}",
+          {{else if (eq type "text")}}
+          {{@key}}: "{{default}}",
+          {{else}}
+          {{@key}}: {{default}},
+          {{/if}}
+        {{/each}}
+      }}'>
+        <legend>statement {{add @index 1}}</legend>
+        <p x-html='compile("{{statement}}", data, local{{@index}})'></p>
+        <div style="margin-left: 2rem">
+          {{#each data}}
+          {{#if (eq type "name")}}
+          <label for="{{@key}}">name</label>
+          <input type="text" id="{{@key}}" x-model="local{{@../index}}.{{@key}}">
+          {{else if (eq type "number")}}
+          <label for="{{@key}}">{{@key}}</label>
+          <input type="number" id="{{@key}}" x-model="local{{@../index}}.{{@key}}" min="{{min}}" max="{{max}}">
+          {{else if (eq type "range")}}
+          <label for="{{@key}}">{{@key}} (<span x-text="local{{@../index}}.{{@key}}"></span>)</label>
+          <input type="range" id="{{@key}}" x-model="local{{@../index}}.{{@key}}" min="{{min}}" max="{{max}}">
+          {{else if (eq type "boolean")}}
+          <label for="{{@key}}">{{@key}}</label>
+          <input type="checkbox" id="{{@key}}" x-model="local{{@../index}}.{{@key}}">{{else}}
+          <span>no input defined for
+            {{@key}}</span>
+          {{/if}}
+          <br>
+          {{/each}}
+        </div>
+      </fieldset>
+      {{/each}}
+    </section>
+
+    <hr>
+    <section id="global-data">
+      <h2>twiddles</h2>
+      {{#each statements.data_defaults}}
+      {{#if (eq type "name")}}
+      <label for="{{@key}}">name</label>
+      <input type="text" id="{{@key}}" x-model="data.{{@key}}">
+      {{else if (eq type "text")}}
+      <label for="{{@key}}">{{@key}}</label>
+      <input type="text" id="{{@key}}" x-model="data.{{@key}}">
+      {{else if (eq type "number")}}
+      <label for="{{@key}}">{{@key}}</label>
+      <input type="number" id="{{@key}}" x-model="data.{{@key}}" min="{{min}}" max="{{max}}">
+      {{else if (eq type "range")}}
+      <label for="{{@key}}">{{@key}} (<span x-text="data.{{@key}}"></span>)</label>
+      <input type="range" id="{{@key}}" x-model="data.{{@key}}" min="{{min}}" max="{{max}}">
+      {{else}}
+      <span>no input defined for {{@key}}</span>
+      {{/if}}
+      <br>
+      {{/each}}
+      <details>
+        <summary>debug</summary>
+        {{#each statements.data_defaults}}
+        {{@key}}: <span style="padding: 0 0.5rem; background: lightblue;" x-text="data.{{@key}}"></span>
+        <br>
+        {{/each}}
+      </details>
+    </section>
+  </main>
+
+  <footer>
+  </footer>
+</body>
+
+</html>

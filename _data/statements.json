@@ -1,0 +1,88 @@
+{
+    "statements": [
+        {
+            "statement": "{{{stewart}}}'s parents bought them a house outright. It is in {{{stewart}}}'s name, and has {{{bedrooms}}} bedrooms. {{{stewart}}} lives there with {{{friends}}} friends, who {{{stewart}}} charges {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to."
+        },
+        {
+            "statement": "{{{stewart}}} is mortgaging a {{{bedrooms}}}-bed house. {{{stewart}}} could{{#if not}} not{{/if}} afford the mortgage alone. {{{stewart}}} lives there with {{{friends}}} friends, who {{{stewart}}} charges {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to, the combined rent totalling {{{mortgage_coverage}}}% of the mortgage costs.",
+            "data": {
+                "mortgage_coverage": {
+                    "type": "number",
+                    "default": 80,
+                    "min": 0,
+                    "max": 100
+                },
+                "not": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
+        {
+            "statement": "{{{stewart}}}'s parents mortgage a {{{bedrooms}}}-bed house. {{{stewart}}} lives in the house {{#if for_free}}for free{{else}}and also pays rent{{/if}}. {{{friends}}} of {{{stewart}}}'s friends live there, who pay {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to, the combined rent totalling {{{mortgage_coverage}}}% of the mortgage costs.",
+            "data": {
+                "mortgage_coverage": {
+                    "type": "number",
+                    "default": 80,
+                    "min": 0,
+                    "max": 100
+                },
+                "for_free": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
+        {
+            "statement": "{{{stewart}}} has payed {{{downpayment}}}% of the mortgage as a downpayment on a {{{bedrooms}}}-bed house. {{{stewart}}} and {{{friends}}} friends live there, all paying {{{currency}}}{{{rent_amount}}} per {{{rent_time}}} ({{{rent_percent}}}% of the market rent {{{currency}}}{{{market_rent}}}) to make up the full mortgage costs. Each year, the ownership of the house so far is split between the relative amount of money each person has payed so far, {{#if not_downpayment}}not {{/if}}including {{{stewart}}}'s downpayment.",
+            "data": {
+                "downpayment": {
+                    "type": "range",
+                    "default": 10,
+                    "min": 0,
+                    "max": 100
+                },
+                "not_downpayment": {
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        }
+    ],
+    "data_defaults": {
+        "stewart": {
+            "type": "name",
+            "default": "stewart"
+        },
+        "bedrooms": {
+            "type": "number",
+            "default": 4
+        },
+        "friends": {
+            "type": "range",
+            "default": 3,
+            "min": 0,
+            "max": 5
+        },
+        "currency": {
+            "type": "text",
+            "default": "£"
+        },
+        "rent_time": {
+            "type": "text",
+            "default": "month"
+        },
+        "rent_percent": {
+            "type": "range",
+            "default": 50,
+            "min": 0,
+            "max": 120
+        },
+        "market_rent": {
+            "type": "number",
+            "default": 450,
+            "min": 10,
+            "max": 1500
+        }
+    }
+}
