@@ -117,6 +117,17 @@
           <input type="checkbox" id="not_downpayment" x-model="local3.not_downpayment">          <br>
         </div>
       </fieldset>
+      <fieldset name="woah" x-data="{local4: {
+          months: 2,
+                }}">
+        <legend>statement 5</legend>
+        <p x-html="compile(&quot;{{{stewart}}} owns a house. {{{stewart}}}&#x27;s friend is staying for {{{months}}} months in {{{stewart}}}&#x27;s spare room while they don&#x27;t have a house. {{{stewart}}} lets them live there for free.&quot;, data, local4)"></p>
+        <div style="margin-left: 2rem">
+          <label for="months">months (<span x-text="local4.months"></span>)</label>
+          <input type="range" id="months" x-model="local4.months" min="1" max="12">
+          <br>
+        </div>
+      </fieldset>
     </section>
 
     <hr>

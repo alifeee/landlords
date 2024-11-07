@@ -47,6 +47,17 @@
                     "default": false
                 }
             }
+        },
+        {
+            "statement": "{{{stewart}}} owns a house. {{{stewart}}}'s friend is staying for {{{months}}} months in {{{stewart}}}'s spare room while they don't have a house. {{{stewart}}} lets them live there for free.",
+            "data": {
+                "months": {
+                    "type": "range",
+                    "default": 2,
+                    "min": 1,
+                    "max": 12
+                }
+            }
         }
     ],
     "data_defaults": {
